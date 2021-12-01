@@ -30,11 +30,6 @@ const TaskList: FunctionComponent<TasksListProps> = ({
   const [nameOfTask, setNameOfTask] = useState('');
   console.log('name', nameOfTask);
 
-  const textHandler = (enteredName: string) => {
-    setNameOfTask(enteredName);
-    console.log('test', enteredName);
-  };
-
   const handleSubmitTask = () => {
     if (nameOfTask === '') {
       return;
@@ -60,7 +55,8 @@ const TaskList: FunctionComponent<TasksListProps> = ({
         <TextInput
           style={styles.tasksTextInput}
           value={nameOfTask}
-          onChangeText={textHandler}
+          onChangeText={setNameOfTask}
+          autoFocus
           placeholder="Write a task to do"
         />
         <TouchableOpacity onPress={handleSubmitTask}>

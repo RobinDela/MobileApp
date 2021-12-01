@@ -72,6 +72,7 @@ PODS:
     - FlipperKit/FlipperKitNetworkPlugin
   - fmt (6.2.1)
   - glog (0.3.5)
+  - IQKeyboardManagerSwift (6.5.4)
   - libevent (2.1.12)
   - OpenSSL-Universal (1.1.180)
   - RCT-Folly (2021.06.28.00-v2):
@@ -337,6 +338,14 @@ PODS:
     - React-jsi (= 0.66.2)
     - React-logger (= 0.66.2)
     - React-perflogger (= 0.66.2)
+  - ReactNativeKeyboardManager (6.5.4-3):
+    - IQKeyboardManagerSwift (= 6.5.4)
+    - React-Core
+    - React-RCTText
+  - RNGestureHandler (1.10.3):
+    - React-Core
+  - RNVectorIcons (9.0.0):
+    - React-Core
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -394,6 +403,9 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - ReactNativeKeyboardManager (from `../node_modules/react-native-keyboard-manager`)
+  - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -409,6 +421,7 @@ SPEC REPOS:
     - Flipper-RSocket
     - FlipperKit
     - fmt
+    - IQKeyboardManagerSwift
     - libevent
     - OpenSSL-Universal
     - YogaKit
@@ -472,6 +485,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/runtimeexecutor"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativeKeyboardManager:
+    :path: "../node_modules/react-native-keyboard-manager"
+  RNGestureHandler:
+    :path: "../node_modules/react-native-gesture-handler"
+  RNVectorIcons:
+    :path: "../node_modules/react-native-vector-icons"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -492,6 +511,7 @@ SPEC CHECKSUMS:
   FlipperKit: d8d346844eca5d9120c17d441a2f38596e8ed2b9
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 5337263514dd6f09803962437687240c5dc39aa4
+  IQKeyboardManagerSwift: 2dde0fc70110e8eac7ccce2a46fdbec6a850b414
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
   RCT-Folly: a21c126816d8025b547704b777a2ba552f3d9fa9
@@ -518,6 +538,9 @@ SPEC CHECKSUMS:
   React-RCTVibration: 3e815c3d2dd2e0e931b68595b5b92d23ba38b3fb
   React-runtimeexecutor: 393e26602c1b248683372051e34db63e359e3b01
   ReactCommon: c0263c1a41509aeb94be3214fa7bc3b71eae5ef6
+  ReactNativeKeyboardManager: 4fb4d82d670ec6c00e9a2d2cc576f7cbb14975d6
+  RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
+  RNVectorIcons: 4143ba35feebab8fdbe6bc43d1e776b393d47ac8
   Yoga: 9a08effa851c1d8cc1647691895540bc168ea65f
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

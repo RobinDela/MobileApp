@@ -87,7 +87,14 @@ const SingleTask: FunctionComponent<TaskProps> = ({
           <Image source={require('./images/delete.png')} />
         </TouchableOpacity>
       </View>
-
+      <View style={styles.editButtons}>
+        <TouchableOpacity onPress={editTaskMode}>
+          <Image source={require('./images/cancel.png')} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleSubmitEditedTask}>
+          <Image source={require('./images/validate.png')} />
+        </TouchableOpacity>
+      </View>
       <Button title="confirm" onPress={handleSubmitEditedTask} />
     </View>
   );
@@ -118,6 +125,11 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     textDecorationLine: 'line-through',
     textDecorationStyle: 'solid',
+  },
+  editButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
   },
 
   deleteText: {

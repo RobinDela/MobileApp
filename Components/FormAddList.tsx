@@ -45,8 +45,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    margin: '5%',
-    marginBottom: 12,
+    margin: 15,
   },
   AddListTextInput: {
     height: 40,

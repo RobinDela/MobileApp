@@ -1,9 +1,20 @@
-import {customAlphabet} from 'nanoid/non-secure';
+import {useQuery, useMutation} from '@apollo/client';
+import {
+  CREATE_LIST_MUTATION,
+  DELETE_LIST_MUTATION,
+  EDIT_TASK_NAME_MUTATION,
+  DELETE_TASK_MUTATION,
+  TOGGLE_TASK_MUTATION,
+  ADD_TASK_MUTATION,
+  EDIT_LIST_MUTATION,
+} from './GraphQL/Mutations';
+import {LOAD_LISTS} from './GraphQL/Queries';
+import React from 'react';
 
-import React, {useState} from 'react';
 import {
   View,
   Text,
+  Image,
   ScrollView,
   StyleSheet,
   TouchableWithoutFeedback,
@@ -16,101 +27,153 @@ import Todo from './Todo';
 import type {List} from './typesFile';
 
 const Main = () => {
-  const [lists, setLists] = useState<List[]>([
-    {
-      id: 'list-0',
-      name: 'Example 1',
-      tasks: [{name: 'task test 1', completed: false, id: 'testId'}],
-    },
-    {
-      id: 'list-1',
-      name: 'Example 2',
-      tasks: [{name: 'task test 2', completed: false, id: 'testId2'}],
-    },
-    {
-      id: 'list-2',
-      name: 'Example 3',
-      tasks: [
-        {name: 'task test 3', completed: true, id: 'testId3'},
-        {name: 'task test 3.1', completed: false, id: 'testId3.1'},
-        {name: 'task test 3.2', completed: false, id: 'testId3.2'},
-      ],
-    },
-  ]);
-  const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz0123456789', 10);
+  const {data, loading} = useQuery(LOAD_LISTS);
+  const [addListMut] = useMutation(CREATE_LIST_MUTATION, {
+    refetchQueries: [LOAD_LISTS, 'getAllLists'],
+  });
+  const [deleteListMut] = useMutation(DELETE_LIST_MUTATION, {
+    refetchQueries: [LOAD_LISTS, 'getAllLists'],
+  });
+  const [deleteTaskMut] = useMutation(DELETE_TASK_MUTATION, {
+    refetchQueries: [LOAD_LISTS, 'getAllLists'],
+  });
+  const [toggleTaskMut] = useMutation(TOGGLE_TASK_MUTATION, {
+    refetchQueries: [LOAD_LISTS, 'getAllLists'],
+  });
+  const [editListNameMut] = useMutation(EDIT_LIST_MUTATION, {
+    refetchQueries: [LOAD_LISTS, 'getAllLists'],
+  });
+  const [addTaskMut] = useMutation(ADD_TASK_MUTATION, {
+    refetchQueries: [LOAD_LISTS, 'getAllLists'],
+  });
+  const [editTaskNameMut] = useMutation(EDIT_TASK_NAME_MUTATION, {
+    refetchQueries: [LOAD_LISTS, 'getAllLists'],
+  });
 
-  console.log('lists', lists);
+  // const [addListMut] = useMutation(CREATE_LIST_MUTATION, {
+  //   update: (cache, {data: returnData}, {variables}) => {
+  //     if (!returnData) return;
+  //     const lists = cache.readQuery({query: LOAD_LISTS, variables});
+
+  //     cache.writeQuery({
+  //       query: LOAD_LISTS,
+  //       variables,
+  //       data: {getAllLists: [...lists.getAllLists, returnData.addList]},
+  //     });
+  //   },
+  // });
+  // const [deleteListMut] = useMutation(DELETE_LIST_MUTATION, {
+  //   update: (cache, {data: returnData}, {variables}) => {
+  //     if (!returnData) return;
+  //     const lists = cache.readQuery({query: LOAD_LISTS, variables});
+
+  //     cache.writeQuery({
+  //       query: LOAD_LISTS,
+  //       variables,
+  //       data: {getAllLists: [...lists.getAllLists, returnData.deleteList]},
+  //     });
+  //   },
+  // });
+
+  // const [deleteTaskMut] = useMutation(DELETE_TASK_MUTATION, {
+  //   update: (cache, {data: returnData}, {variables}) => {
+  //     if (!returnData) return;
+  //     const lists = cache.readQuery({query: LOAD_LISTS, variables});
+  //     const newList = lists.getAllLists.map((list: any) => {
+  //       if (list.id === variables.listId) {
+  //         return {
+  //           ...list,
+  //           tasks: [...list.tasks, returnData.deleteTask],
+  //         };
+  //       }
+  //       return list;
+  //     });
+
+  //     cache.writeQuery({
+  //       query: LOAD_LISTS,
+  //       variables,
+  //       data: {getAllLists: newList},
+  //     });
+  //   },
+  // });
+
+  //const [toggleTaskMut] = useMutation(TOGGLE_TASK_MUTATION);
+
+  //const [editListNameMut] = useMutation(EDIT_LIST_MUTATION);
+  // const [addTaskMut] = useMutation(ADD_TASK_MUTATION, {
+  //   update: (cache, {data: returnData}, {variables}) => {
+  //     if (!returnData) return;
+  //     const lists = cache.readQuery({query: LOAD_LISTS, variables});
+  //     const newList = lists.getAllLists.map((list: any) => {
+  //       if (list.id === variables.listId) {
+  //         return {
+  //           ...list,
+  //           tasks: [...list.tasks, returnData.addTask],
+  //         };
+  //       }
+  //       return list;
+  //     });
+
+  //     cache.writeQuery({
+  //       query: LOAD_LISTS,
+  //       variables,
+  //       data: {getAllLists: newList},
+  //     });
+  //   },
+  // });
+
+  //const [editTaskNameMut] = useMutation(EDIT_TASK_NAME_MUTATION);
 
   const addList = (name: string) => {
-    const newList = {
-      id: nanoid(),
-      name,
-      tasks: [],
-    };
-    setLists([...lists, newList]);
+    addListMut({
+      variables: {
+        name,
+      },
+    });
   };
 
   const deleteList = (id: string) => {
-    const remainingLists = lists.filter(list => id !== list.id);
-    setLists(remainingLists);
+    deleteListMut({
+      variables: {
+        id,
+      },
+    });
   };
 
   const deleteTask = (listId: string, taskId: string) => {
-    const listIndex = lists.findIndex(list => list.id === listId);
-    const list = lists[listIndex];
-    const newList = {
-      ...list,
-      tasks: list.tasks.filter(task => task.id !== taskId),
-    };
-
-    const newLists = [
-      ...lists.slice(0, listIndex),
-      newList,
-      ...lists.slice(listIndex + 1),
-    ];
-
-    setLists(newLists);
+    deleteTaskMut({
+      variables: {
+        listId,
+        taskId,
+      },
+    });
   };
 
   const toggleTask = (listId: string, taskId: string) => {
-    const newListsToggled = lists.map(listItem => {
-      if (listItem.id === listId) {
-        return {
-          ...listItem,
-          tasks: listItem.tasks.map(task => {
-            if (task.id === taskId) {
-              return {...task, completed: !task.completed};
-            }
-            return task;
-          }),
-        };
-      }
-      return listItem;
+    toggleTaskMut({
+      variables: {
+        listId,
+        taskId,
+      },
     });
-    setLists(newListsToggled);
   };
 
   const editListName = (id: string, newName: string) => {
-    const editedList = lists.map(list => {
-      if (id === list.id) {
-        return {...list, name: newName};
-      }
-      return list;
+    editListNameMut({
+      variables: {
+        name: newName,
+        id,
+      },
     });
-    setLists(editedList);
   };
 
   const addTask = (id: string, name: string) => {
-    const newListWithTask = lists.map(list => {
-      if (id === list.id) {
-        return {
-          ...list,
-          tasks: [...list.tasks, {name, completed: false, id: nanoid()}],
-        };
-      }
-      return list;
+    addTaskMut({
+      variables: {
+        listId: id,
+        name,
+      },
     });
-    setLists(newListWithTask);
   };
 
   const editTaskName = (
@@ -118,36 +181,30 @@ const Main = () => {
     taskId: string,
     newTaskName: string,
   ) => {
-    const newEditedListWithTask = lists.map(listItem => {
-      if (listItem.id === listId) {
-        return {
-          ...listItem,
-          tasks: listItem.tasks.map(task => {
-            if (task.id === taskId) {
-              return {...task, name: newTaskName};
-            }
-            return task;
-          }),
-        };
-      }
-      return listItem;
+    editTaskNameMut({
+      variables: {
+        listId,
+        taskId,
+        newName: newTaskName,
+      },
     });
-    setLists(newEditedListWithTask);
   };
+  console.log('data', data);
+  console.log('loading', loading);
 
   return (
     <View accessible={true}>
-      <View style={styles.background}>
+      <View style={styles.header}>
         <Text style={styles.titleTop}>What needs to be done?</Text>
         <FormAddList addList={addList} />
       </View>
-      <ScrollView>
-        <KeyboardAvoidingView>
-          {/* behavior={Platform.OS === 'ios' ? 'padding' : 'height'} */}
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <Text style={styles.listTitle}>
-              {' '}
-              {lists.map(list => (
+      <ScrollView style={styles.listsContainer}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <Text style={styles.listTitle}>
+            {loading ? (
+              <Image source={require('./images/delete.png')} />
+            ) : (
+              data.getAllLists.map((list: List) => (
                 <Todo
                   key={list.id}
                   list={list}
@@ -158,17 +215,18 @@ const Main = () => {
                   toggleTask={toggleTask}
                   editTaskName={editTaskName}
                 />
-              ))}
-            </Text>
-          </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
+              ))
+            )}
+          </Text>
+        </TouchableWithoutFeedback>
       </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  background: {
+  header: {
+    marginBottom: 20,
     backgroundColor: '#06daf0',
     shadowColor: '#000',
     shadowOffset: {
@@ -180,6 +238,9 @@ const styles = StyleSheet.create({
 
     elevation: 6,
   },
+  listsContainer: {
+    marginBottom: 200,
+  },
   title: {
     textAlign: 'center',
   },
@@ -188,6 +249,7 @@ const styles = StyleSheet.create({
   },
   titleTop: {
     fontSize: 30,
+    fontWeight: 'bold',
     textAlign: 'center',
   },
 });
